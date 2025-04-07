@@ -11,7 +11,7 @@ ax1 = Axis(fig[1, 1];  # set up axis tick marks to match grid cells
     xminorticksvisible = true, xminorgridvisible = true, xticklabelrotation = pi/4,
     yticks = range(grid.y0, grid.yf, 3), yminorticks = IntervalsBetween(5),
     yminorticksvisible = true, yminorgridvisible = true,
-)
+)#using vim now
 lines!(  # plot boundary of grid with a dashed line
     [grid.x0, grid.x0, grid.xf, grid.xf, grid.x0],  # point x-values
     [grid.y0, grid.yf, grid.yf, grid.y0, grid.y0];  # point y-values
