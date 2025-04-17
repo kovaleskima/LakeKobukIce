@@ -5,7 +5,10 @@ import GeoInterface as GI
 
 # Open coastline geometry file as a DataFrame
 vertices = CSV.read("kobuk_vertices.csv", DataFrame; header=false)
-
+x0 = -4e4
+xf = 4e4
+y0 = -4e4
+yf = 4e4 
 grid = RegRectilinearGrid(; x0 = -4e4, xf = 4e4, y0 = -4e4, yf = 4e4, Nx = 100, Ny = 100)
 
 fig = Figure();
@@ -41,8 +44,44 @@ fig  # display the figure
 
 x = vertices[:,1]
 y = vertices[:,2]
-multipoint = GI.MultiPoint(GI.Point.(zip(x,y)));
-plot!(ax1, multipoint; marker = '.', markersize = 20)
+
+# outer ring (closed)
+outer_ring = GI.LineString([(x0,y0), (x0,yf), (xf,yf), (xf,y0), (x0,y0)])
+
+# coastline as inner ring (must also be a closed LineString)
+coastline_points = collect(zip(x, y))
+if coastline_points[begin] != coastline_points[end]
+    push!(coastline_points, coastline_points[begin])  # close the loop
+end
+hole_ring = GI.LineString(coastline_points)
+
+topo_features = GI.Polygon([outer_ring, hole_ring])
+
+# Get rings from polygon
+rings = GI.getring(topo_features)
+
+# Outer ring
+outer_coords = GI.coordinates(rings[1])
+outer_x, outer_y = map(x -> getindex.(outer_coords, x), (1, 2))
+
+hole_coords = GI.coordinates(rings[2])
+hole_x, hole_y = map(x -> getindex.(hole_coords, x), (1, 2))
+
+# Plot
+fig = Figure()
+ax = Axis(fig[1, 1], title="Lake Geometry", xlabel="x", ylabel="y")
+
+# Plot outer polygon filled
+poly!(ax, outer_x, outer_y; color=:green, strokecolor=:black)
+
+# Plot hole by drawing it in white to simulate cut-out
+poly!(ax, hole_x, hole_y; color=:white, strokecolor=:black)
+
 fig
 
+topo_field = initialize_topography_field(;,topo_features)
+
+topo_color = RGBf(115/255, 93/255, 55,355)
+poly!(topo_field.poly; color = topo_color)
+ax1.title = "Grid and Domain Setup"
 
