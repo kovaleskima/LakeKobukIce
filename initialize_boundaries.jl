@@ -79,9 +79,9 @@ poly!(ax, hole_x, hole_y; color=:white, strokecolor=:black)
 
 fig
 
-topo_field = initialize_topography_field(;,topo_features)
+#topo_field = initialize_topography_field([; topo_features])
 
-topo_color = RGBf(115/255, 93/255, 55,355)
-poly!(topo_field.poly; color = topo_color)
-ax1.title = "Grid and Domain Setup"
+#topo_color = RGBf(115/255, 93/255, 55,355)
+#poly!(topo_field.poly; color = topo_color)
+#ax1.title = "Grid and Domain Setup"
 
