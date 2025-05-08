@@ -77,3 +77,4 @@ Colorbar(fig[2, end+1], u_hm)
 resize_to_layout!(fig)
 fig
 
+save("output.png", fig) #save figures so that I can view them later
