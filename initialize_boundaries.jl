@@ -3,15 +3,16 @@ using Subzero  # bring Subzero into scope
 using CairoMakie, GeoInterfaceMakie # bring plotting packages into scope
 import GeoInterface as GI
 
+const FT = Float64
+
 # Open coastline geometry file as a DataFrame
 vertices = CSV.read("kobuk_vertices.csv", DataFrame; header=false)
 x0 = -4e4
 xf = 4e4
 y0 = -4e4
 yf = 4e4 
-grid = RegRectilinearGrid(; x0 = -4e4, xf = 4e4, y0 = -4e4, yf = 4e4, Nx = 100, Ny = 100)
+grid = RegRectilinearGrid(FT, x0 = -4e4, xf = 4e4, y0 = -4e4, yf = 4e4, Nx = 100, Ny = 100)
 
-fig = Figure();
 ax1 = Axis(fig[1, 1];  # set up axis tick marks to match grid cells
     title = "Grid Setup",
     xticks = range(grid.x0, grid.xf, 5), xminorticks = IntervalsBetween(5),
